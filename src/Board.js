@@ -79,27 +79,73 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var conflict = 0;
+
+      _.each(this.rows()[rowIndex], function(col) {
+        if (col) {
+          conflict++;
+        }
+      });
+      return (conflict > 1);
+
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var rowConflict = false;
+
+      _.each(this.rows(), function(row) {
+        var conflicts = 0;
+        _.each(row, function(col) {
+          if (col) {
+            conflicts++;
+          }
+        });
+        if (conflicts > 1) {
+          rowConflict = true;
+        }
+      });
+      return rowConflict;
     },
-
-
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var conflicts = 0;
+
+      _.each(this.rows(), function(col, i) {
+        if (col && i === colIndex) {
+          conflicts++;
+        }
+      });
+      return (conflicts > 1);
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var colConflict = false;
+      var conflicts = [];
+
+      _.each(this.rows(), function(row) {
+        _.each(row, function(col, i) {
+          if (col) {
+            if (conflicts[i]) {
+              conflicts[i]++;
+            } else {
+              conflicts[i] = 1;
+            }
+          }
+        });
+      });
+
+      _.each(conflicts, function(column, i, conflicts) {
+        if (column > 1) {
+          colConflict = true;
+        }
+      });
+      return colConflict;
     },
 
 
@@ -109,12 +155,30 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var currentColumn = majorDiagonalColumnIndexAtFirstRow;
+      var diagConflict = 0;
+      _.each(this.rows(), function(row) {
+        // _.each(row, function(col, i)
+        for (var j =  -(row.length)+1; j < row.length; j++) {// need to use for loop and start at -(length-2)
+          if (j === currentColumn) {
+            if (row[j]) {
+              diagConflict++;
+            }   
+          }
+        }
+        currentColumn++;
+        // console.log(currentColumn);
+      });
+      return (diagConflict > 1);
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var that = this;
+
+      return _.contains(_.map(this.rows(), function(row, i) {
+        return that.hasMajorDiagonalConflictAt(i);
+      }), true);
     },
 
 
@@ -124,12 +188,30 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var currentColumn = minorDiagonalColumnIndexAtFirstRow;
+      var diagConflict = 0;
+      _.each(this.rows(), function(row) {
+        // _.each(row, function(col, i)
+        for (var j = row.length*2-1; j >= 0; j--) {
+          if (j === currentColumn) {
+            if (row[j]) {
+              diagConflict++;
+            }   
+          }
+        }
+        currentColumn--;
+        // console.log(currentColumn);
+      });
+      return (diagConflict > 1);
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var that = this;
+
+      return _.contains(_.map(this.rows(), function(row, i) {
+        return that.hasMinorDiagonalConflictAt(i);
+      }), true);
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
