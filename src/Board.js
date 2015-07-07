@@ -115,10 +115,12 @@
     hasColConflictAt: function(colIndex) {
       var conflicts = 0;
 
-      _.each(this.rows(), function(col, i) {
-        if (col && i === colIndex) {
-          conflicts++;
-        }
+      _.each(this.rows(), function(row) {
+        _.each(row, function(col, i) {
+          if (col && i === colIndex) {
+            conflicts++;
+          }
+        });
       });
       return (conflicts > 1);
     },
