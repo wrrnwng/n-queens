@@ -87,9 +87,12 @@
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
       var that = this;
-      return _.contains(_.map(_.range(this.get('n')), function(rowIndex) {
-        return that.hasRowConflictAt(rowIndex);
-      }), true);
+      return _.chain(_.range(this.get('n')))
+              .map(function(rowIndex) {
+                return that.hasRowConflictAt(rowIndex);
+              })
+              .contains(true)
+              .value();
     },
 
     // COLUMNS - run from top to bottom
