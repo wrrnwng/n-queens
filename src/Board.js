@@ -100,41 +100,25 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      var conflicts = 0;
-
-      _.each(this.rows(), function(row) {
-        _.each(row, function(col, i) {
-          if (col && i === colIndex) {
-            conflicts++;
-          }
-        });
-      });
-      return (conflicts > 1);
+      return (_.chain(this.rows())
+              .map(function(row) {
+                return row[colIndex];
+              })
+              .reduce(function(memo, row) {
+                return memo + row;
+              })
+              .value() > 1);
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var colConflict = false;
-      var conflicts = [];
-
-      _.each(this.rows(), function(row) {
-        _.each(row, function(col, i) {
-          if (col) {
-            if (conflicts[i]) {
-              conflicts[i]++;
-            } else {
-              conflicts[i] = 1;
-            }
-          }
-        });
-      });
-
-      _.each(conflicts, function(column, i, conflicts) {
-        if (column > 1) {
-          colConflict = true;
-        }
-      });
-      return colConflict;
+      var that = this;
+      return _.chain(_.range(this.get('n')))
+              .map(function(colIndex) {
+                return that.hasColConflictAt(colIndex);
+              })
+              .contains(true)
+              .value();
     },
 
 
