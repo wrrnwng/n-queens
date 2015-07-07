@@ -79,15 +79,9 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var conflict = 0;
-
-      _.each(this.rows()[rowIndex], function(col) {
-        if (col) {
-          conflict++;
-        }
-      });
-      return (conflict > 1);
-
+      return (_.reduce(this.rows(rowIndex), function(memo, col) {
+        return memo + col;
+      }) > 1);
     },
 
     // test if any rows on this board contain conflicts
