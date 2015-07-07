@@ -79,27 +79,17 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return (_.reduce(this.rows(rowIndex), function(memo, col) {
-        return memo + col;
+      return (_.reduce(this.get(rowIndex), function(memo, col) {
+        return memo + col;  
       }) > 1);
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      var rowConflict = false;
-
-      _.each(this.rows(), function(row) {
-        var conflicts = 0;
-        _.each(row, function(col) {
-          if (col) {
-            conflicts++;
-          }
-        });
-        if (conflicts > 1) {
-          rowConflict = true;
-        }
-      });
-      return rowConflict;
+      var that = this;
+      return _.contains(_.map(_.range(this.get('n')), function(rowIndex) {
+        return that.hasRowConflictAt(rowIndex);
+      }), true);
     },
 
     // COLUMNS - run from top to bottom
