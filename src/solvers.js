@@ -30,29 +30,6 @@ window.findNRooksSolution = function(n) {
     }
     solution = board.rows();
   }
-
-  // var placePieces = function() {
-  //   var pieces = 0;
-  //   _.each(board.rows(), function(row, r) {
-  //     _.each(row, function(col, c) {
-  //       if (!col) {
-  //         board.togglePiece(r, c);
-  //         pieces++;
-  //         if (board.hasAnyRooksConflicts()) {
-  //           board.togglePiece(r, c);
-  //           pieces--;
-  //         }
-  //       }
-  //     });
-  //     solution = board.rows();
-  //   });
-  //   return pieces;
-  // };
-  // if (args.length > 0) {
-  //   board.togglePiece(args[0], args[1]);    
-  // }
-  
-  // placePieces();
   
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
