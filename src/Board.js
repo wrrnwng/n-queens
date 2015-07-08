@@ -79,20 +79,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return (_.reduce(this.get(rowIndex), function(memo, col) {
-        return memo + col;  
-      }) > 1);
+      var row = this.get(rowIndex);
+      var count = 0;
+
+      for (var i = 0; i < row.length; i++) {
+        count += row[i]
+      }
+
+      return count > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      var that = this;
-      return _.chain(_.range(this.get('n')))
-              .map(function(rowIndex) {
-                return that.hasRowConflictAt(rowIndex);
-              })
-              .contains(true)
-              .value();
+      var size = this.get('n');
+
+      for (var i = 0; i < size; i++) {
+        if(this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
     // COLUMNS - run from top to bottom
@@ -100,25 +106,26 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return (_.chain(this.rows())
-              .map(function(row) {
-                return row[colIndex];
-              })
-              .reduce(function(memo, row) {
-                return memo + row;
-              })
-              .value() > 1);
+      var size = this.get('n');
+      var count = 0;
+
+      for(var i = 0; i < size; i++) {
+        var row = this.get(i);
+        count += row[colIndex];
+      }
+      return count > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var that = this;
-      return _.chain(_.range(this.get('n')))
-              .map(function(colIndex) {
-                return that.hasColConflictAt(colIndex);
-              })
-              .contains(true)
-              .value();
+      var size = this.get('n');
+
+      for(var i = 0; i < size; i++) {
+        if(this.hasColConflictAt(i)){
+          return true;
+        }
+      }
+      return false;
     },
 
 
