@@ -148,10 +148,16 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var that = this;
+      var result = false;
 
-      return _.contains(_.map(this.rows(), function(row, i) {
-        return that.hasMajorDiagonalConflictAt(i);
-      }), true);
+      _.each(this.rows(), function(row) {
+        for (var i = -(row.length) + 1; i < row.length; i++) {
+          if (that.hasMajorDiagonalConflictAt(i)) {
+            return result = true;
+          }
+        }
+      });
+      return result;
     },
 
 
@@ -181,10 +187,16 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       var that = this;
+      var result = false;
 
-      return _.contains(_.map(this.rows(), function(row, i) {
-        return that.hasMinorDiagonalConflictAt(i);
-      }), true);
+      _.each(this.rows(), function(row) {
+        for (var i = row.length*2-1; i >= 0; i--) {
+          if (that.hasMinorDiagonalConflictAt(i)) {
+            return result = true;
+          }
+        }
+      });
+      return result;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
